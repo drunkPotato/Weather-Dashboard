@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Weather Dashboard</h1>
+  </header>
+
+  <main>
+    <!-- Search Section -->
+    <section id="search-section">
+      <input type="text" id="city-input" placeholder="Enter a city..." />
+      <button id="search-button">Search</button>
+    </section>
+
+    <!-- Current Weather Display -->
+    <section id="current-weather" class="weather-box">
+      <h2>Current Weather</h2>
+      <div id="current-details">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- 5-Day Forecast -->
+    <section id="forecast" class="weather-box">
+      <h2>5-Day Forecast</h2>
+      <div id="forecast-cards">
+        <!-- Cards injected by JS -->
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Built with OpenWeatherMap API</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
