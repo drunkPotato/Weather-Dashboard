@@ -66,4 +66,29 @@ body {
     font-size: 0.9rem;
     color: #777;
   }
+
+  #forecast-cards {
+    display: flex;
+    flex-direction: row;      /* Key: horizontal layout */
+    flex-wrap: nowrap;        /* Prevent wrapping */
+    overflow-x: auto;         /* Enable horizontal scroll if overflow */
+    gap: 1rem;
+    padding: 1rem 0;
+    scrollbar-width: thin;    /* Optional: style scrollbar */
+  }
   
+  .forecast-card {
+    flex: 0 0 auto;            /* Prevent shrinking */
+    width: 160px;              /* Fixed width for consistent card size */
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-align: center;
+    border: 1px solid red;
+  }
+  
+  .forecast-card img {
+    width: 60px;
+    height: 60px;
+  }
