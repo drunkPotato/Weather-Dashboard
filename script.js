@@ -1,13 +1,22 @@
 // Ensure DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button');
-  
+    const cityInput = document.getElementById('city-input');
+
     searchButton.addEventListener('click', () => {
       const city = document.getElementById('city-input').value.trim();
       if (!city) return;
   
       fetchCurrentWeather(city);
       fetchForecast(city);
+    });
+
+    cityInput.addEventListener('keydown', (event) => {
+      const city = document.getElementById('city-input').value.trim();
+      if (event.key === 'Enter') {
+        fetchCurrentWeather(city);
+        fetchForecast(city);
+      }
     });
   });
   
