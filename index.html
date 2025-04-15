@@ -18,11 +18,16 @@
       <button id="search-button">Search</button>
     </section>
 
-    <!-- Current Weather Display -->
     <section id="current-weather" class="weather-box">
       <h2>Current Weather</h2>
       <div id="current-details">
-        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <section id="detailed-hourly" class="weather-box">
+      <h2>Today’s Hourly Forecast</h2>
+      <input type="range" id="hour-slider" min="0" max="0" value="0" step="1" />
+      <div id="hourly-details" style="margin-top: 20px;">
       </div>
     </section>
 
@@ -41,5 +46,7 @@
 
   <script src="config.js"></script>
   <script src="script.js"></script>
+
+
 </body>
 </html>

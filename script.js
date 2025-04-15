@@ -69,6 +69,28 @@ function displayCurrentWeather(data) {
 }
 
 function displayForecast(data) {
+  // Filter entries for today
+  const localDate = new Date();
+  const localDay = localDate.getDate();
+  const localMonth = localDate.getMonth();
+  const localYear = localDate.getFullYear();
+  
+  const todayHourly = data.list.filter(entry => {
+    const entryDate = new Date(entry.dt_txt);
+    return (
+      entryDate.getDate() === localDay &&
+      entryDate.getMonth() === localMonth &&
+      entryDate.getFullYear() === localYear
+    );
+  });
+
+  if (todayHourly.length === 0) {
+    document.getElementById('hourly-details').innerHTML = '<p>No hourly data available for today.</p>';
+    return;
+  }
+
+  setupHourlySlider(todayHourly);
+
   const forecastContainer = document.getElementById('forecast-cards');
   forecastContainer.innerHTML = '';
 
@@ -100,4 +122,37 @@ function displayForecast(data) {
 
     forecastContainer.appendChild(card);
   });
+
+  function setupHourlySlider(hourlyData) {
+    const slider = document.getElementById('hour-slider');
+    const details = document.getElementById('hourly-details');
+
+    // Initialize slider
+    slider.max = hourlyData.length - 1;
+    slider.value = 0;
+    
+    function renderDetails(index) {
+      const entry = hourlyData[index];
+      const time = new Date(entry.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      details.innerHTML = `
+        <h4>${time}</h4>
+        <img src="https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png" alt="icon">
+        <p><strong>${entry.weather[0].main}</strong>: ${entry.weather[0].description}</p>
+        <p>Temp: ${entry.main.temp.toFixed(1)}°C</p>
+        <p>Humidity: ${entry.main.humidity}%</p>
+        <p>Wind: ${entry.wind.speed} m/s</p>
+      `;
+    }
+
+    // Initial render
+    renderDetails(0);
+    
+    console.log("Local Date:", localDate.toString());
+    console.log("Filtered hourly forecasts:", todayHourly);
+    // Update on slider change
+    slider.addEventListener('input', () => {
+      renderDetails(slider.value);
+    });
+  }
 }
