@@ -18,13 +18,13 @@
       <button id="search-button">Search</button>
     </section>
 
-    <section id="current-weather" class="weather-box">
+    <section id="current-weather" class="weather-box" style="display: none;">
       <h2>Current Weather</h2>
       <div id="current-details">
       </div>
     </section>
 
-    <section id="detailed-hourly" class="weather-box">
+    <section id="detailed-hourly" class="weather-box" style="display: none;">
       <h2>Today’s Hourly Forecast</h2>
       <input type="range" id="hour-slider" min="0" max="0" value="0" step="1" />
       <div id="hourly-details" style="margin-top: 20px;">
@@ -32,7 +32,7 @@
     </section>
 
     <!-- 5-Day Forecast -->
-    <section id="forecast" class="weather-box">
+    <section id="forecast" class="weather-box" style="display: none;">
       <h2>5-Day Forecast</h2>
       <div id="forecast-cards">
         <!-- Cards injected by JS -->

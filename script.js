@@ -7,13 +7,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const city = document.getElementById('city-input').value.trim();
       if (!city) return;
   
+
+      document.getElementById("current-weather").style.display = "block";
+      document.getElementById("detailed-hourly").style.display = "block";
+      document.getElementById("forecast").style.display = "block";
+
       fetchCurrentWeather(city);
       fetchForecast(city);
+
+
     });
 
     cityInput.addEventListener('keydown', (event) => {
       const city = document.getElementById('city-input').value.trim();
       if (event.key === 'Enter') {
+
+        if(!city) return;
+
+        document.getElementById("current-weather").style.display = "block";
+        document.getElementById("detailed-hourly").style.display = "block";
+        document.getElementById("forecast").style.display = "block";
         fetchCurrentWeather(city);
         fetchForecast(city);
       }
@@ -145,6 +158,7 @@ function displayForecast(data) {
       `;
     }
 
+    
     // Initial render
     renderDetails(0);
     
