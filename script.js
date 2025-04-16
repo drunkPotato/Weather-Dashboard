@@ -1,4 +1,3 @@
-// Ensure DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     const searchButton = document.getElementById('search-button');
     const cityInput = document.getElementById('city-input');
@@ -111,28 +110,52 @@ function displayForecast(data) {
 
   data.list.forEach(entry => {
     const date = entry.dt_txt.split(' ')[0];
-    const hour = parseInt(entry.dt_txt.split(' ')[1].split(':')[0]);
-
-    // Use 12:00 as a representative snapshot of each day
-    if (hour === 12 && !dailyMap[date]) {
-      dailyMap[date] = entry;
-    }
+    if (!dailyMap[date]) dailyMap[date] = [];
+    dailyMap[date].push(entry);
   });
 
-  Object.keys(dailyMap).slice(0, 5).forEach(date => {
-    const entry = dailyMap[date];
-
+  Object.keys(dailyMap).slice(1, 5).forEach(date => {
+    const entries = dailyMap[date]; // entries: array of 3-hour forecast objects for that day
+  
     const card = document.createElement('div');
     card.className = 'forecast-card';
-
-    card.innerHTML = `
-      <h4>${new Date(date).toDateString()}</h4>
-      <img src="https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png" alt="icon">
-      <p><strong>${entry.weather[0].main}</strong>: ${entry.weather[0].description}</p>
-      <p>Temp: ${entry.main.temp_min.toFixed(1)}°C – ${entry.main.temp_max.toFixed(1)}°C</p>
-      <p>Humidity: ${entry.main.humidity}%</p>
-    `;
-
+  
+    const dateHeader = document.createElement('h4');
+    dateHeader.textContent = new Date(date).toDateString();
+  
+    const slider = document.createElement('input');
+    slider.type = 'range';
+    slider.min = 0;
+    slider.max = entries.length - 1;
+    slider.step = 1;
+    slider.value = 0;
+  
+    const details = document.createElement('div');
+    details.className = 'slider-details';
+  
+    function renderSliderContent(index) {
+      const entry = entries[index];
+      const time = new Date(entry.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  
+      details.innerHTML = `
+        <h5>${time}</h5>
+        <img src="https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png" alt="icon">
+        <p><strong>${entry.weather[0].main}</strong>: ${entry.weather[0].description}</p>
+        <p>Temp: ${entry.main.temp.toFixed(1)}°C</p>
+        <p>Humidity: ${entry.main.humidity}%</p>
+        <p>Wind: ${entry.wind.speed} m/s</p>
+      `;
+    }
+  
+    renderSliderContent(0);
+    slider.addEventListener('input', () => {
+      renderSliderContent(slider.value);
+    });
+  
+    card.appendChild(dateHeader);
+    card.appendChild(slider);
+    card.appendChild(details);
+  
     forecastContainer.appendChild(card);
   });
 
