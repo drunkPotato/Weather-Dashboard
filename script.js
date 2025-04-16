@@ -128,7 +128,7 @@ function displayForecast(data) {
     slider.min = 0;
     slider.max = entries.length - 1;
     slider.step = 1;
-    slider.value = 0;
+    slider.value = 4;
   
     const details = document.createElement('div');
     details.className = 'slider-details';
@@ -147,7 +147,8 @@ function displayForecast(data) {
       `;
     }
   
-    renderSliderContent(0);
+    renderSliderContent(4);
+
     slider.addEventListener('input', () => {
       renderSliderContent(slider.value);
     });
@@ -168,6 +169,7 @@ function displayForecast(data) {
     slider.value = 0;
     
     function renderDetails(index) {
+
       const entry = hourlyData[index];
       const time = new Date(entry.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
@@ -185,8 +187,6 @@ function displayForecast(data) {
     // Initial render
     renderDetails(0);
     
-    console.log("Local Date:", localDate.toString());
-    console.log("Filtered hourly forecasts:", todayHourly);
     // Update on slider change
     slider.addEventListener('input', () => {
       renderDetails(slider.value);
