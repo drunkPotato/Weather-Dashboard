@@ -1,98 +1,101 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const searchButton = document.getElementById('search-button');
-    const cityInput = document.getElementById('city-input');
+// Logic: 
+// Step 1: Measure input
+// Step 2: Fetch Data
+// Step 3: Display Information
 
-    searchButton.addEventListener('click', () => {
+//Get Input
+document.addEventListener('DOMContentLoaded', () => {
+
+  //Set up 
+  const searchButton = document.getElementById('search-button');
+  const cityInput = document.getElementById('city-input');
+
+
+  //Execute Search on input submission
+  searchButton.addEventListener('click', CitySearch);
+
+  cityInput.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        CitySearch();
+      }
+    });
+
+  });
+
+    // Search logic
+    function CitySearch(){
       const city = document.getElementById('city-input').value.trim();
       if (!city) return;
-  
-
+    
+      //Set the elements visible
       document.getElementById("current-weather").style.display = "block";
       document.getElementById("detailed-hourly").style.display = "block";
       document.getElementById("forecast").style.display = "block";
-
-      fetchCurrentWeather(city);
+    
+      //Call the API
+      getCurrentWeather(city)
+      .then(data => displayCurrentWeather(data))
+      .catch(err => showError(err.message));
       fetchForecast(city);
-
-
-    });
-
-    cityInput.addEventListener('keydown', (event) => {
-      const city = document.getElementById('city-input').value.trim();
-      if (event.key === 'Enter') {
-
-        if(!city) return;
-
-        document.getElementById("current-weather").style.display = "block";
-        document.getElementById("detailed-hourly").style.display = "block";
-        document.getElementById("forecast").style.display = "block";
-        fetchCurrentWeather(city);
-        fetchForecast(city);
-      }
-    });
-  });
+    }
   
-function fetchCurrentWeather(city) {
-  const endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
 
-  fetch(endpoint)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('City not found');
-      }
-      return response.json();
-    })
-    .then(data => displayCurrentWeather(data))
-    .catch(err => {
-      document.getElementById('current-details').innerHTML = `<p>Error: ${err.message}</p>`;
-      console.error(err);
-    });
-}
+  async function getCurrentWeather(city) {
+    //Consume Endpoint
+    const endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+  
+    //Return Data if OK or Error else
+    const response = await fetch(endpoint);
+    if (!response.ok) {
+      throw new Error('City not found');
+    }
+  
+    const data = await response.json();
+    return data;
+  }
 
-function fetchForecast(city) {
-  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
+  function fetchForecast(city) {
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
 
-  fetch(forecastUrl)
-    .then(response => {
-      if (!response.ok) throw new Error('Forecast data unavailable');
-      return response.json();
-    })
-    .then(data => displayForecast(data))
-    .catch(err => {
-      document.getElementById('forecast-cards').innerHTML = `<p>Error: ${err.message}</p>`;
-    });
-}
+    fetch(forecastUrl)
+      .then(response => {
+        if (!response.ok) throw new Error('Forecast data unavailable');
+        return response.json();
+      })
+      .then(data => displayForecast(data))
+      .catch(err => {
+        document.getElementById('forecast-cards').innerHTML = `<p>Error: ${err.message}</p>`;
+      });
+  }
   
   
-function displayCurrentWeather(data) {
-  const container = document.getElementById('current-details');
+  function displayCurrentWeather(data) {
+    const container = document.getElementById('current-details');
 
-  const html = `
-    <h3>${data.name}, ${data.sys.country}</h3>
-    <p><strong>${data.weather[0].main}</strong>: ${data.weather[0].description}</p>
-    <p>Temperature: ${data.main.temp} °C</p>
-    <p>Humidity: ${data.main.humidity}%</p>
-    <p>Wind: ${data.wind.speed} m/s</p>
-    <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" 
-      alt="Weather icon" 
-      style="width: 100px; height: 100px;" />
-  `;
-  container.innerHTML = html;
-}
+    const html = `
+      <h3>${data.name}, ${data.sys.country}</h3>
+      <p><strong>${data.weather[0].main}</strong>: ${data.weather[0].description}</p>
+      <p>Temperature: ${data.main.temp} °C</p>
+      <p>Humidity: ${data.main.humidity}%</p>
+      <p>Wind: ${data.wind.speed} m/s</p>
+      <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" 
+        alt="Weather icon" 
+        style="width: 100px; height: 100px;" />
+    `;
+    container.innerHTML = html;
+  }
 
 function displayForecast(data) {
   // Filter entries for today
   const localDate = new Date();
   const localDay = localDate.getDate();
   const localMonth = localDate.getMonth();
-  const localYear = localDate.getFullYear();
   
   const todayHourly = data.list.filter(entry => {
     const entryDate = new Date(entry.dt_txt);
     return (
       entryDate.getDate() === localDay &&
-      entryDate.getMonth() === localMonth &&
-      entryDate.getFullYear() === localYear
+      entryDate.getMonth() === localMonth
     );
   });
 
@@ -161,6 +164,7 @@ function displayForecast(data) {
   });
 
   function setupHourlySlider(hourlyData) {
+    
     const slider = document.getElementById('hour-slider');
     const details = document.getElementById('hourly-details');
 
