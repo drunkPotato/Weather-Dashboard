@@ -27,16 +27,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const city = document.getElementById('city-input').value.trim();
       if (!city) return;
     
-      //Set the elements visible
-      document.getElementById("current-weather").style.display = "block";
-      document.getElementById("detailed-hourly").style.display = "block";
-      document.getElementById("forecast").style.display = "block";
-    
-      //Call the API
+      //Call the API Current Weather
       getCurrentWeather(city)
+      //Display
       .then(data => displayCurrentWeather(data))
       .catch(err => showError(err.message));
-      fetchForecast(city);
+
+      //Call the API Forecast Weather
+      fetchForecast(city)
+      //Display
+      .then(data => displayForecast(data))
+      .catch(err => {
+        document.getElementById('forecast-cards').innerHTML = `<p>Error: ${err.message}</p>`;
+      });
     }
   
 
@@ -54,18 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
     return data;
   }
 
-  function fetchForecast(city) {
+  async function fetchForecast(city) {
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
-
-    fetch(forecastUrl)
-      .then(response => {
-        if (!response.ok) throw new Error('Forecast data unavailable');
-        return response.json();
-      })
-      .then(data => displayForecast(data))
-      .catch(err => {
-        document.getElementById('forecast-cards').innerHTML = `<p>Error: ${err.message}</p>`;
-      });
+  
+    const response = await fetch(forecastUrl);
+    if (!response.ok) throw new Error('Forecast data unavailable');
+    return await response.json();
   }
   
   
@@ -82,6 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
         alt="Weather icon" 
         style="width: 100px; height: 100px;" />
     `;
+
+    //Set the elements visible
+    document.getElementById("current-weather").style.display = "block";
+    document.getElementById("detailed-hourly").style.display = "block";
+    document.getElementById("forecast").style.display = "block";
     container.innerHTML = html;
   }
 
