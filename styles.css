@@ -50,6 +50,18 @@ body {
   #current-weather, #forecast {
     margin-top: 2rem;
   }
+
+  #today-current {
+    border: 2px solid #444;
+    background-color: #eef;
+  }
+  
+  .weather-card {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: #f8f8f8;
+  }
   
   .weather-box h2 {
     margin-bottom: 1rem;
