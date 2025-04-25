@@ -1,106 +1,331 @@
 /* styles.css */
 
-body {
-    font-family: sans-serif;
-    background-color: #f0f4f8;
-    margin: 0;
-    padding: 0;
-    color: #333;
-  }
-  
-  header {
-    background-color: #0077b6;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  main {
-    display: inline-block;
-    margin: 2rem auto;
-    padding: 1rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  #search-section {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-  }
-  
-  #search-section input {
-    padding: 0.5rem;
-    width: 60%;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  #search-section button {
-    padding: 0.5rem 1rem;
-    background-color: #0077b6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  #current-weather, #forecast {
-    margin-top: 2rem;
-  }
+/* --- Global Styles & Resets --- */
+* {
+  box-sizing: border-box; /* Makes width/height calculations include padding and border */
+  margin: 0;
+  padding: 0;
+}
 
-  #today-current {
-    border: 2px solid #444;
-    background-color: #eef;
-  }
-  
-  .weather-card {
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background: #f8f8f8;
-  }
-  
-  .weather-box h2 {
+html {
+  font-size: 16px; /* Base font size */
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Nicer font stack */
+  background-color: #f0f4f8; /* Light blue-gray background */
+  color: #333; /* Dark gray text */
+  line-height: 1.6;
+  display: flex; /* Use flexbox for body */
+  flex-direction: column; /* Stack children vertically */
+  min-height: 100vh; /* Ensure body takes at least full viewport height */
+}
+
+/* --- Header --- */
+header {
+  background-color: #005f73; /* Darker cyan */
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  font-weight: 600; /* Slightly bolder */
+}
+
+/* --- Main Content Area --- */
+main {
+  flex-grow: 1; /* Allow main to grow and push footer down */
+  width: 90%; /* Responsive width */
+  max-width: 1000px; /* Max width for larger screens */
+  margin: 2rem auto; /* Center horizontally with top/bottom margin */
+  padding: 1.5rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Search Section --- */
+#search-section {
+  display: flex;
+  flex-wrap: wrap; /* Allow wrapping on small screens */
+  justify-content: center;
+  align-items: center; /* Align items vertically */
+  gap: 0.75rem; /* Space between elements */
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e0e0e0; /* Separator line */
+}
+
+#search-section h2 {
+  width: 100%; /* Make heading take full width */
+  text-align: center;
+  margin-bottom: 0.75rem;
+  color: #005f73;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
+#search-section input[type="text"] {
+  padding: 0.6rem 0.8rem;
+  flex-grow: 1; /* Allow input to take available space */
+  min-width: 200px; /* Minimum width */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+#search-section button {
+  padding: 0.6rem 1.2rem;
+  background-color: #0077b6; /* Consistent blue */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease; /* Smooth hover effect */
+}
+
+#search-section button:hover {
+  background-color: #023e8a; /* Darker blue on hover */
+}
+
+/* --- Weather Display Container --- */
+#weather-display {
+  margin-top: 1rem; /* Space above the weather info */
+}
+
+/* --- Today's Weather Section --- */
+#today-weather {
+  background-color: #e9f5f9; /* Very light blue background */
+  border: 1px solid #bde0fe; /* Light blue border */
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem; /* Space below today's section */
+  text-align: center;
+}
+
+#today-weather h3 {
+  color: #005f73; /* Match header color */
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+/* --- Slider Styles (Common for Today & Forecast) --- */
+input[type="range"] {
+  width: 70%; /* Make slider reasonably wide */
+  max-width: 400px; /* Limit max width */
+  margin: 0.75rem auto; /* Center slider */
+  display: block; /* Ensure it takes block layout */
+  cursor: pointer;
+  height: 8px;
+  -webkit-appearance: none; /* Override default look */
+  appearance: none;
+  background: #bde0fe; /* Light blue track */
+  border-radius: 5px;
+  outline: none;
+}
+/* Slider thumb styles */
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: #0077b6; /* Blue thumb */
+  border-radius: 50%;
+  cursor: pointer;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: #0077b6;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none; /* Remove default Firefox border */
+}
+
+/* --- Details Sections (Common for Today & Forecast) --- */
+.today-slider-details,
+.forecast-slider-details {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.6); /* Slightly transparent white */
+  border-radius: 6px;
+  min-height: 180px; /* Ensure minimum height for content */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Center content vertically */
+}
+
+.today-slider-details h5, /* Time */
+.forecast-slider-details h5 {
+  font-size: 1.1rem;
+  color: #03045e; /* Dark blue for time */
+  margin-bottom: 0.5rem;
+}
+
+.today-slider-details img,
+.forecast-slider-details img {
+  width: 60px; /* Consistent icon size */
+  height: 60px;
+  margin-bottom: 0.5rem;
+  object-fit: contain; /* Ensure icon fits well */
+}
+
+.today-slider-details p,
+.forecast-slider-details p {
+  margin: 0.2rem 0;
+  font-size: 0.95rem;
+}
+
+.today-slider-details p strong,
+.forecast-slider-details p strong {
+  color: #003e5c; /* Slightly darker blue for labels like "Temp:" */
+}
+
+/* --- Forecast Cards Container --- */
+.forecast-cards-container {
+  display: grid;
+  /* Responsive grid: min 160px width, auto-fit columns */
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1.5rem; /* Space between cards */
+  padding-top: 1rem;
+}
+
+.forecast-cards-container h2 { /* Style the "4-Day Forecast" heading if you add one */
+    grid-column: 1 / -1; /* Make heading span all columns */
+    text-align: center;
     margin-bottom: 1rem;
-  }
-  
-  #current-details img {
-    display: block;
+    color: #005f73;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+/* --- Individual Forecast Card --- */
+.forecast-card {
+  background-color: #ffffff; /* White cards */
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e0e0e0; /* Subtle border */
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add interaction */
+}
+
+.forecast-card:hover {
+    transform: translateY(-3px); /* Slight lift on hover */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.forecast-card h4 { /* Date header in card */
+  font-size: 1rem;
+  font-weight: 600;
+  color: #0077b6; /* Blue date */
+  margin-bottom: 0.75rem;
+}
+
+/* Reuse slider and details styles defined above */
+/* .forecast-card input[type="range"] {} */ /* Inherits common slider style */
+/* .forecast-card .forecast-slider-details {} */ /* Inherits common details style */
+
+
+/* --- Error Message Styling --- */
+.error-message {
+    color: #d90429; /* Red for errors */
+    background-color: #ffccd5; /* Light pink background */
+    border: 1px solid #d90429;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: 500;
+}
+
+
+/* --- Footer --- */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: 2rem; /* Ensure space above footer */
+  font-size: 0.9rem;
+  color: #555; /* Slightly darker gray */
+  background-color: #e9ecef; /* Light gray footer background */
+  border-top: 1px solid #d6dcdf;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 768px) {
+  main {
+    width: 95%;
+    padding: 1rem;
     margin: 1rem auto;
   }
-  
-  footer {
-    text-align: center;
-    padding: 1rem;
-    font-size: 0.9rem;
-    color: #777;
+
+  header {
+    padding: 0.8rem 1rem;
   }
 
-  #forecast-cards {
-    display: flex;
-    flex-direction: row;      /* Key: horizontal layout */
-    flex-wrap: nowrap;        /* Prevent wrapping */
-    overflow-x: auto;         /* Enable horizontal scroll if overflow */
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  #search-section {
+    flex-direction: column; /* Stack search elements vertically */
+    align-items: stretch; /* Make button/input full width */
+  }
+
+  #search-section input[type="text"] {
+     width: 100%; /* Full width on small screens */
+  }
+
+  .forecast-cards-container {
+    /* Adjust grid for smaller screens if needed, e.g., fewer columns */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1rem;
-    padding: 1rem 0;
-    scrollbar-width: thin;    /* Optional: style scrollbar */
   }
-  
-  .forecast-card {
-    flex: 0 0 auto;            /* Prevent shrinking */
-    width: 160px;              /* Fixed width for consistent card size */
-    background-color: #f3f4f6;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    text-align: center;
-    border: 1px solid red;
+
+  #today-weather h3 {
+      font-size: 1.4rem;
   }
-  
-  .forecast-card img {
-    width: 60px;
-    height: 60px;
+
+  input[type="range"] {
+      width: 85%; /* Make slider wider on mobile */
   }
+}
+
+@media (max-width: 480px) {
+  html {
+      font-size: 15px; /* Slightly smaller base font */
+  }
+
+  main {
+      margin: 0.5rem auto;
+      border-radius: 0; /* Full width feel */
+      width: 100%;
+      box-shadow: none;
+  }
+
+  .forecast-cards-container {
+    /* Ensure at least two cards fit reasonably */
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
+  }
+
+   .forecast-card {
+        padding: 0.75rem;
+   }
+
+   #today-weather {
+       padding: 1rem;
+   }
+
+   #today-weather h3 {
+      font-size: 1.3rem;
+  }
+
+  header h1 {
+    font-size: 1.3rem;
+  }
+}
