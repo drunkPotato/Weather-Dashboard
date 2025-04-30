@@ -2,7 +2,7 @@
 
 A simple web application that allows users to search for and view the current weather and a 5-day forecast for a specified city using the OpenWeatherMap API.
 
-**Visit this page to see the result:** [Link to your deployed GitHub Pages site]
+**Visit this page to see the result:** https://drunkpotato.github.io/Weather-Dashboard/
 
 ## Features
 
