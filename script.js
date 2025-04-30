@@ -1,10 +1,11 @@
 
+//Store references in constants for later use 
 const searchButton = document.getElementById('search-button');
 const cityInput = document.getElementById('city-input');
-
 const apiKey = '10bbd7f83cb2c130109469cc99a9f754';
 
 
+//Check for user input
 if (searchButton && cityInput) {
     searchButton.addEventListener('click', onUserSearch);
 
@@ -14,9 +15,10 @@ if (searchButton && cityInput) {
         }
     });
 } else {
-    console.error("Search button or city input field not found in the DOM.");
+        console.error("ID for seach button or city input doesn't match");
 }
 
+//Find and display the available data
 function onUserSearch() {
     const city = cityInput.value.trim();
     if (!city) {
@@ -35,14 +37,15 @@ function onUserSearch() {
 
 
 function fetchWeatherData(city) {
-    if (!apiKey || apiKey === 'YOUR_API_KEY') {
-        return Promise.reject(new Error("API Key not configured. Please set the 'apiKey' variable."));
+    if (!apiKey) {
+        return Promise.reject(new Error("API Key not found"));
     }
     if (!city) {
         return Promise.reject(new Error("No city provided"));
     }
 
 
+    //Call both API endpoints simultaneously
     return Promise.allSettled([
         getCurrentWeather(city),
         fetchForecast(city)
@@ -55,16 +58,17 @@ function fetchWeatherData(city) {
              throw new Error(forecastResult.reason?.message || 'Forecast data unavailable');
         }
         if (currentResult.status === 'rejected') {
-             console.warn("Could not fetch current weather:", currentResult.reason?.message);
+             throw new Error("Could not fetch current weather:", currentResult.reason?.message);
         }
 
         return {
-            currentData: currentResult.status === 'fulfilled' ? currentResult.value : null, // Allow null if current fails
+            currentData: currentResult.value,
             forecastData: forecastResult.value
         };
     });
 }
 
+//Create an API call for the current Weather and return its data in .json
 async function getCurrentWeather(city) {
     const endpoint = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
     const response = await fetch(endpoint);
@@ -75,6 +79,7 @@ async function getCurrentWeather(city) {
     return await response.json();
 }
 
+//Create an API call for the Forecast and return its data in .json
 async function fetchForecast(city) {
     const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric`;
     const response = await fetch(forecastUrl);
@@ -85,8 +90,9 @@ async function fetchForecast(city) {
     return await response.json();
 }
 
+//The current weather is displayed as the first datapoint of todays forecast to facilitate easy navigation
+//However its structured slightly different and thus needs to be prepared first
 function convertCurrentToForecastLikeEntry(currentData) {
-    if (!currentData) return null; 
 
     const now = currentData.dt ? new Date(currentData.dt * 1000) : new Date();
 
@@ -99,9 +105,11 @@ function convertCurrentToForecastLikeEntry(currentData) {
     };
 }
 
+//split data into 5 entries correctly formatted
 function prepareForecastData(currentData, forecastData) {
     const dailyMap = {};
 
+    //populate array
     forecastData.list.forEach(entry => {
         const date = entry.dt_txt.split(' ')[0];
         if (!dailyMap[date]) dailyMap[date] = [];
@@ -110,6 +118,7 @@ function prepareForecastData(currentData, forecastData) {
 
     const currentEntry = convertCurrentToForecastLikeEntry(currentData);
 
+    //handle current weather insertion
     if (currentEntry) {
         const todayKey = currentEntry.dt_txt.split(' ')[0]; 
 
@@ -123,6 +132,7 @@ function prepareForecastData(currentData, forecastData) {
         }
     }
 
+    //return entries in order
     return Object.keys(dailyMap)
         .sort()
         .slice(0, 5)
@@ -132,6 +142,7 @@ function prepareForecastData(currentData, forecastData) {
         }));
 }
 
+//Display the data in the correct html object, deleting its previous content
 function updateWeatherDetails(detailsContainer, entry) {
     const time = new Date(entry.dt_txt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
     const iconUrl = `https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png`;
@@ -146,6 +157,7 @@ function updateWeatherDetails(detailsContainer, entry) {
     `;
 }
 
+//set up html obejct for current weather & handles data display
 function createTodaySection(todayData) {
     const { date, entries } = todayData;
 
@@ -162,6 +174,7 @@ function createTodaySection(todayData) {
 
     section.appendChild(header);
 
+    //slider logic
     if (entries.length > 1) {
         const slider = document.createElement('input');
         slider.type = 'range';
@@ -179,6 +192,7 @@ function createTodaySection(todayData) {
 
     section.appendChild(details);
 
+    //initial render
     if (entries.length > 0) {
         updateWeatherDetails(details, entries[0]);
     } else {
@@ -188,6 +202,7 @@ function createTodaySection(todayData) {
     return section;
 }
 
+//set up html obejct for forecast & handles data display
 function createForecastCard(dayData) {
     const { date, entries } = dayData;
 
@@ -203,6 +218,7 @@ function createForecastCard(dayData) {
 
     card.appendChild(dateHeader);
 
+    //create slider
     if (entries.length > 1) {
         const slider = document.createElement('input');
         slider.type = 'range';
@@ -220,16 +236,17 @@ function createForecastCard(dayData) {
 
     card.appendChild(details);
 
-     if (entries.length > 0) {
+    //initial render
+    if (entries.length > 0) {
         updateWeatherDetails(details, entries[0]); 
     } else {
         details.innerHTML = "<p>No specific time data.</p>"; 
     }
 
-
     return card;
 }
 
+//Combines the logic to display the data
 function displayWeatherData({ currentData, forecastData }) {
     const weatherDisplayArea = document.getElementById("weather-display");
     if (!weatherDisplayArea) {
@@ -267,7 +284,7 @@ function displayWeatherData({ currentData, forecastData }) {
     weatherDisplayArea.style.display = "block";
 }
 
-
+//Useful for feedback 
 function displayError(message, container = null) {
     const targetContainer = container || document.getElementById("weather-display");
      if (targetContainer) {
