@@ -2,7 +2,6 @@
 //Store references in constants for later use 
 const searchButton = document.getElementById('search-button');
 const cityInput = document.getElementById('city-input');
-const apiKey = '10bbd7f83cb2c130109469cc99a9f754';
 
 
 //Check for user input
