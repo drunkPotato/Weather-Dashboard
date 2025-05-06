@@ -11,16 +11,13 @@ A simple web application that allows users to search for and view the current we
 *   Provides a 5-day weather forecast.
 *   Includes sliders for forecast days with multiple time points to view details for specific times.
 *   Basic error handling for invalid city names or API issues.
-*   Responsive layout for different screen sizes (verify your CSS supports this).
 
 ## Technical Notes
 
 *   Built with standard HTML, CSS, and vanilla JavaScript (no frameworks).
 *   Utilizes the [OpenWeatherMap API](https://openweathermap.org/api) for fetching weather data.
-*   Employs the browser's `fetch` API for making asynchronous network requests.
-*   Uses JavaScript Promises (`async/await`, `Promise.allSettled`, `.then()`, `.catch()`) to manage asynchronous operations.
 *   Dynamically manipulates the DOM to display fetched weather information and create UI elements like forecast cards and sliders.
-*   Processes and structures API data for user-friendly presentation (e.g., grouping forecast entries by day).
+*   Processes and structures API data for user-friendly presentation.
 
 ## Project Structure
 
